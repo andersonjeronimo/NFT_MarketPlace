@@ -4,8 +4,9 @@ pragma solidity 0.8.24;
 // Uncomment this line to use console.log
 // import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract NFTMarket {
+contract NFTMarket is ReentrancyGuard {
     address payable public owner;
     uint256 public listingPrice = 0.025 ether;
     uint256 private _itemIdCounter;
@@ -39,7 +40,7 @@ contract NFTMarket {
         address nftContract,
         uint tokenId,
         uint price
-    ) public payable {
+    ) public payable nonReentrant {
         require(price > 0, "Invalid price");
         require(msg.value == listingPrice, "Invalid listing price");
 
@@ -54,7 +55,7 @@ contract NFTMarket {
             price,
             false
         );
-        
+
         IERC721(nftContract).transferFrom(msg.sender, address(this), tokenId);
         emit MarketItemCreated(itemId, nftContract, tokenId, msg.sender, price);
     }
