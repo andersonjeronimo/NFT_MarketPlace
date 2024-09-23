@@ -77,4 +77,63 @@ contract NFTMarket is ReentrancyGuard {
         _itemSoldCounter++;
         payable(owner).transfer(listingPrice);
     }
+
+    function fetchMarketItems() public view returns (MarketItem[] memory) {
+        uint totalItemCounter = _itemIdCounter;
+        uint unsoldItemCount = totalItemCounter - _itemSoldCounter;
+        MarketItem[] memory items = new MarketItem[](unsoldItemCount);
+        uint currentIndex = 0;
+
+        for (uint i = 1; i < totalItemCounter; i++) {
+            if (!marketItems[i].sold) {
+                items[currentIndex] = marketItems[i];
+                currentIndex++;
+            }
+        }
+        return items;
+    }
+
+    function fetchMyOwnedItems() public view returns (MarketItem[] memory) {
+        uint totalItemCounter = _itemIdCounter;
+        uint itemCount = 0;
+        for (uint i = 1; i < totalItemCounter; i++) {
+            if (marketItems[i].owner == msg.sender) {
+                itemCount++;
+            }
+        }
+
+        MarketItem[] memory items = new MarketItem[](itemCount);
+        uint currentIndex = 0;
+        for (uint i = 1; i < totalItemCounter; i++) {
+            if (marketItems[i].owner == msg.sender) {
+                items[currentIndex] = marketItems[i];
+                currentIndex++;
+            }
+        }
+        return items;
+    }
+
+    function fetchMyCreatedItems() public view returns (MarketItem[] memory) {
+        uint totalItemCounter = _itemIdCounter;
+        uint itemCount = 0;
+        for (uint i = 1; i < totalItemCounter; i++) {
+            if (marketItems[i].seller == msg.sender) {
+                itemCount++;
+            }
+        }
+
+        MarketItem[] memory items = new MarketItem[](itemCount);
+        uint currentIndex = 0;
+        for (uint i = 1; i < totalItemCounter; i++) {
+            if (marketItems[i].seller == msg.sender) {
+                items[currentIndex] = marketItems[i];
+                currentIndex++;
+            }
+        }
+        return items;
+    }
+
+
+
+
 }
