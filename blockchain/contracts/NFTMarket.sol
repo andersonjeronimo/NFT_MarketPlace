@@ -84,8 +84,8 @@ contract NFTMarket is ReentrancyGuard {
         MarketItem[] memory items = new MarketItem[](unsoldItemCount);
         uint currentIndex = 0;
 
-        for (uint i = 1; i < totalItemCounter; i++) {
-            if (!marketItems[i].sold) {
+        for (uint i = 1; i <= totalItemCounter; i++) {
+            if (marketItems[i].owner == address(0) && !marketItems[i].sold) {
                 items[currentIndex] = marketItems[i];
                 currentIndex++;
             }
@@ -96,7 +96,7 @@ contract NFTMarket is ReentrancyGuard {
     function fetchMyOwnedItems() public view returns (MarketItem[] memory) {
         uint totalItemCounter = _itemIdCounter;
         uint itemCount = 0;
-        for (uint i = 1; i < totalItemCounter; i++) {
+        for (uint i = 1; i <= totalItemCounter; i++) {
             if (marketItems[i].owner == msg.sender) {
                 itemCount++;
             }
@@ -104,7 +104,7 @@ contract NFTMarket is ReentrancyGuard {
 
         MarketItem[] memory items = new MarketItem[](itemCount);
         uint currentIndex = 0;
-        for (uint i = 1; i < totalItemCounter; i++) {
+        for (uint i = 1; i <= totalItemCounter; i++) {
             if (marketItems[i].owner == msg.sender) {
                 items[currentIndex] = marketItems[i];
                 currentIndex++;
@@ -116,7 +116,7 @@ contract NFTMarket is ReentrancyGuard {
     function fetchMyCreatedItems() public view returns (MarketItem[] memory) {
         uint totalItemCounter = _itemIdCounter;
         uint itemCount = 0;
-        for (uint i = 1; i < totalItemCounter; i++) {
+        for (uint i = 1; i <= totalItemCounter; i++) {
             if (marketItems[i].seller == msg.sender) {
                 itemCount++;
             }
@@ -124,7 +124,7 @@ contract NFTMarket is ReentrancyGuard {
 
         MarketItem[] memory items = new MarketItem[](itemCount);
         uint currentIndex = 0;
-        for (uint i = 1; i < totalItemCounter; i++) {
+        for (uint i = 1; i <= totalItemCounter; i++) {
             if (marketItems[i].seller == msg.sender) {
                 items[currentIndex] = marketItems[i];
                 currentIndex++;
