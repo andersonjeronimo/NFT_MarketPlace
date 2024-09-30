@@ -1,4 +1,11 @@
 {
+  "scripts": {
+    "test":"npx hardhat coverage",
+    "deploy_market": "npx hardhat ignition deploy ignition/modules/NFTMarket.ts --network amoy",
+    "deploy_collection": "npx hardhat ignition deploy ignition/modules/NFTCollection.ts --network amoy",
+    "verify_market": "npx hardhat verify --network amoy 0x44880A72A06977225c9Fee45AE148917510cf22B",
+    "verify_collection": "npx hardhat verify --network amoy 0x415e0d34214bd02E01EdDe1b74121067B901150A '0x44880A72A06977225c9Fee45AE148917510cf22B'"
+  },
   "dependencies": {
     "@openzeppelin/contracts": "^5.0.2",
     "dotenv": "^16.4.5",
