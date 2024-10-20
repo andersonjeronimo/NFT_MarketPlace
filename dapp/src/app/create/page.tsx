@@ -4,7 +4,7 @@ import { useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 
-import { NFT } from "@/services/Web3Service";
+import { NFT, createAndUpload } from "@/services/Web3Service";
 
 function Create() {
 
@@ -20,6 +20,16 @@ function Create() {
             const file = evt.target.files[0];
             setNft(prevState => ({ ...prevState, image: file }));
         }
+    }
+
+    function btnSubmitClick() {
+        if (!nft) {
+            return;
+        }
+        setMessage("Sendind your NFT to blockchain...wait...");
+        createAndUpload(nft)
+            .then(uri => setMessage(uri))
+            .catch(err => setMessage(err));
     }
 
     //form CSS
@@ -59,12 +69,12 @@ function Create() {
                                 <label htmlFor="image" className={_labelCSS}>Image</label>
                                 <input type="file" id="image" onChange={onFileChange} className={_inputCSS} />
                             </div>
-                            <button className={_btnCSS}>Submit</button>
+                            <button className={_btnCSS} onClick={btnSubmitClick}>Submit</button>
                             {
                                 message ?
                                     <p className="font-bold mt-5">{message}</p>
                                     : <></>
-                            }                            
+                            }
                             <p>{JSON.stringify(nft)}</p>
                         </form>
                     </div>
