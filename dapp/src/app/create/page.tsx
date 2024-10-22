@@ -28,8 +28,8 @@ function Create() {
         }
         setMessage("Sendind your NFT to blockchain...wait...");
         createAndUpload(nft)
-            .then(uri => setMessage(uri))
-            .catch(err => setMessage(err));
+            .then(uri => console.log(uri))
+            .catch(err => console.log(err));
     }
 
     //form CSS
@@ -55,15 +55,15 @@ function Create() {
                         <form>
                             <div className="mb-6">
                                 <label htmlFor="name" className={_labelCSS}>Name</label>
-                                <input type="text" id="name" value={nft?.name} onChange={onInputChange} className={_inputCSS} />
+                                <input type="text" id="name" value={nft?.name || ''} onChange={onInputChange} className={_inputCSS} />
                             </div>
                             <div className="mb-6">
                                 <label htmlFor="description" className={_labelCSS}>Author</label>
-                                <input type="text" id="description" value={nft?.description} onChange={onInputChange} className={_inputCSS} />
+                                <input type="text" id="description" value={nft?.description || ''} onChange={onInputChange} className={_inputCSS} />
                             </div>
                             <div className="mb-6">
                                 <label htmlFor="price" className={_labelCSS}>Price (POL | MATIC)</label>
-                                <input type="number" id="price" value={nft?.price} onChange={onInputChange} className={_inputCSS} />
+                                <input type="number" id="price" value={nft?.price || ''} onChange={onInputChange} className={_inputCSS} />
                             </div>
                             <div className="mb-6">
                                 <label htmlFor="image" className={_labelCSS}>Image</label>
