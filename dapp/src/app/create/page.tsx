@@ -69,7 +69,7 @@ function Create() {
                                 <label htmlFor="image" className={_labelCSS}>Image</label>
                                 <input type="file" id="image" onChange={onFileChange} className={_inputCSS} />
                             </div>
-                            <button className={_btnCSS} onClick={btnSubmitClick}>Submit</button>
+                            <button type="button" className={_btnCSS} onClick={btnSubmitClick}>Submit</button>
                             {
                                 message ?
                                     <p className="font-bold mt-5">{message}</p>

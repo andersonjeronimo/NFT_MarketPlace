@@ -18,14 +18,24 @@ async function uploadFile(file: File): Promise<string> {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await axios({
+    /* const response = await axios({
         method: "POST",
         url: "/api/pinata",
         data: formData,
         headers: { "Content-Type": "multipart/form-data" }
-    });
+    }); */
 
-    return `${response.data.uri}`;
+    try {
+        const response = await axios.post('/api/pinata', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+        return `${response.data.uri}`;
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    return "";
+
+
 }
 
 export async function createAndUpload(nft: NFT): Promise<number> {

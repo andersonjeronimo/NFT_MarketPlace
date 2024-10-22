@@ -1,22 +1,33 @@
 import axios from "axios";
 
-async function _pinFileToIPFS(formData: FormData): Promise<string> {
+async function pinFileToIPFS(formData: FormData): Promise<string> {
     //ver Pinata Docs https://docs.pinata.cloud/web3/pinning/pinning-files
-    const response = await axios({
+    /* const response = await axios({
         method: "POST",
         url: "https://api.pinata.cloud/pinning/pinFileToIPFS",
         data: formData,
         headers: {
             "pinata_api_key": `${process.env.API_KEY}`,
-            "pinata_secret_api_key": `${process.env.API_SECRET}`,            
+            "pinata_secret_api_key": `${process.env.API_SECRET}`,
             "Content-Type": "multipart/form-data"
         }
-    });
+    }); */
+
+    const response = await axios.post('https://api.pinata.cloud/pinning/pinFileToIPFS',
+        formData,
+        {
+            headers: {
+                "pinata_api_key": `${process.env.API_KEY}`,
+                "pinata_secret_api_key": `${process.env.API_SECRET}`,
+                "Content-Type": "multipart/form-data"
+            }
+        }
+    );
 
     return `${response.data.IpfsHash}`;
 }
 
-const JWT = `${process.env.JWT}`;
+/* const JWT = `${process.env.JWT}`;
 
 async function pinFileToIPFS(formData: FormData) {
     try {
@@ -46,7 +57,7 @@ async function pinFileToIPFS(formData: FormData) {
     } catch (error) {
         console.log(error);
     }
-}
+} */
 
 
 export async function POST(request: Request) {
