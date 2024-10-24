@@ -14,28 +14,34 @@ export type NFT = {
     image?: File;
 }
 
+export type Metadata = {
+    name?: string;
+    description?: string;
+    image?: string;
+}
+
 async function uploadFile(file: File): Promise<string> {
     const formData = new FormData();
     formData.append("file", file);
-
-    /* const response = await axios({
+    const response = await axios({
         method: "POST",
-        url: "/api/pinata",
+        url: "/api/pinata/file",
         data: formData,
         headers: { "Content-Type": "multipart/form-data" }
-    }); */
+    });
 
-    try {
-        const response = await axios.post('/api/pinata', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-        return `${response.data.uri}`;
+    return `${response.data.uri}`;
+}
 
-    } catch (error) {
-        console.log(error);
-    }
+async function uploadMetadata(metadata: Metadata): Promise<string> {
+    const response = await axios({
+        method: "POST",
+        url: "/api/pinata/metadata",
+        data: metadata,
+        headers: { "Content-Type": "application/json" }
+    });
 
-    return "";
-
-
+    return `${response.data.uri}`;
 }
 
 export async function createAndUpload(nft: NFT): Promise<number> {
@@ -46,8 +52,9 @@ export async function createAndUpload(nft: NFT): Promise<number> {
     //upload da imagem
     const uri = await uploadFile(nft.image);
     console.log(uri);
-
     //criação dos metadatos
+    const metadataUri = await uploadMetadata({ name: nft.name, description: nft.description, image: uri });
+    console.log(metadataUri);
     //mint da NFT
     //criação do market item
 

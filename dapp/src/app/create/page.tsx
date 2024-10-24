@@ -28,7 +28,7 @@ function Create() {
         }
         setMessage("Sendind your NFT to blockchain...wait...");
         createAndUpload(nft)
-            .then(uri => console.log(uri))
+            .then(uri => `NFT created with success. Token ID: ${uri}`)
             .catch(err => console.log(err));
     }
 
