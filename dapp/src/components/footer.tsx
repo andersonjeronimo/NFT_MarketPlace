@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 
 function Footer() {
-    return (<>
+    return (
         <footer className="bg-secondary-500 text-gray-400 sm:px-4">
             <div className="container mx-auto pt-12 px-4 relative">
                 <div className="-mx-4 flex flex-wrap gap-6 items-end mb-12">
@@ -64,7 +64,7 @@ function Footer() {
                 </div>
             </div>
         </footer>
-    </>)
+    )
 }
 
 export default Footer;
