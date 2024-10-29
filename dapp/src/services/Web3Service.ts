@@ -15,6 +15,16 @@ export type NFT = {
     image?: File;
 }
 
+export type NFTDetail = {
+    tokenId: number;
+    price: bigint | string;
+    seller: string;
+    owner: string;
+    image: string;
+    name: string;
+    description: string;
+}
+
 export type Metadata = {
     name?: string;
     description?: string;
@@ -82,7 +92,7 @@ async function createItem(url: string, price: string): Promise<number> {
     const weiPrice = ethers.parseUnits(price, "ether");
     const listingPrice = (await marketContract.listingPrice()).toString();
     const createTx = await marketContract.createMarketItem(COLLECTION_ADDRESS, tokenId, weiPrice, { value: listingPrice });
-    //o recibo da transação é um log do evento que é disparado após essa transação
+    //o recibo da transação contém, dentre outras infos, os logs dos eventos disparados após essa transação
     const createTxReceipt: ethers.ContractTransactionReceipt = await createTx.wait();
     //eventLog = createTxReceipt.logs[0] as EventLog;
     eventLog = createTxReceipt.logs.find(log => (log as EventLog).eventName === "MarketItemCreated") as EventLog;
@@ -111,4 +121,33 @@ export async function createAndUpload(nft: NFT): Promise<number> {
     //criação do market item
     const itemId = await createItem(metadataUri, nft.price);
     return itemId;
+}
+
+export async function loadDetails(itemId: number): Promise<NFTDetail> {
+    const provider = await getProvider();
+    const marketContract = new ethers.Contract(MARKETPLACE_ADDRESS, NFTMarketABI, provider);
+    const collectionContract = new ethers.Contract(COLLECTION_ADDRESS, NFTCollectionABI, provider);
+
+    //TODO: mapping marketItems deve ser PUBLIC [OK]
+    const item: NFTDetail = await marketContract.marketItems(itemId); //mapping(uint => MarketItem) marketItems; // itemId => market item    
+    if (!item) {
+        return {} as NFTDetail;
+    }      
+
+    const tokenUri = await collectionContract.tokenURI(1);
+    // gateway: yellow-wonderful-vulture-357.mypinata.cloud + CID (tokenUri)
+    const metadata = await axios.get(`https://yellow-wonderful-vulture-357.mypinata.cloud/ipfs/${tokenUri}`);
+    console.log(metadata);
+    const price = ethers.formatUnits(item.price.toString(), "ether");    
+    
+    return {
+        tokenId: item.tokenId,
+        price: price,
+        seller: item.seller,
+        owner: item.owner,
+        image: metadata.data.image,
+        name: metadata.data.name,
+        description: metadata.data.description
+    } as NFTDetail;
+
 }

@@ -42,7 +42,7 @@ function Create() {
 
     return (
         <section className="bg-secondary-500 py-24 text-gray-400 sm:px-4">
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto pb-36 pt-16 px-4 relative">
                 <div className="-mx-4 flex flex-wrap gap-2 items-center mb-6">
                     <div className="px-4 w-full md:flex-1">
                         <h2 className="capitalize font-bold text-3xl text-white"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="1.25em" height="1.25em" className="inline-block mb-2 mr-2 text-primary-500">

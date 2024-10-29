@@ -22,7 +22,7 @@ contract NFTMarket is ReentrancyGuard {
         bool sold;
     }
 
-    mapping(uint => MarketItem) marketItems; // itemId => market item
+    mapping(uint => MarketItem) public marketItems; // itemId => market item
 
     constructor() {
         owner = payable(msg.sender);
