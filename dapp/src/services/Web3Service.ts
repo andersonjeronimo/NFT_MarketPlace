@@ -16,6 +16,7 @@ export type NFT = {
 }
 
 export type NFTDetail = {
+    itemId: number;
     tokenId: number;
     price: bigint | string;
     seller: string;
@@ -132,15 +133,16 @@ export async function loadDetails(itemId: number): Promise<NFTDetail> {
     const item: NFTDetail = await marketContract.marketItems(itemId); //mapping(uint => MarketItem) marketItems; // itemId => market item    
     if (!item) {
         return {} as NFTDetail;
-    }      
+    }
 
-    const tokenUri = await collectionContract.tokenURI(1);
+    const tokenUri = await collectionContract.tokenURI(item.tokenId);
     // gateway: yellow-wonderful-vulture-357.mypinata.cloud + CID (tokenUri)
     const metadata = await axios.get(`https://yellow-wonderful-vulture-357.mypinata.cloud/ipfs/${tokenUri}`);
     console.log(metadata);
-    const price = ethers.formatUnits(item.price.toString(), "ether");    
-    
+    const price = ethers.formatUnits(item.price.toString(), "ether");
+
     return {
+        itemId: item.itemId,
         tokenId: item.tokenId,
         price: price,
         seller: item.seller,
