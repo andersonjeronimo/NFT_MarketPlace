@@ -1,8 +1,6 @@
 "use client"
 import React from "react";
 import { useState } from "react";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 
 import { NFT, createAndUpload } from "@/services/Web3Service";
 
@@ -68,14 +66,20 @@ function Create() {
                             <label htmlFor="image" className={_labelCSS}>Image</label>
                             <input type="file" id="image" onChange={onFileChange} className={_inputCSS} />
                         </div>
-                        <button type="button" className={_btnCSS} onClick={btnSubmitClick}>Submit</button>
-                        {
-                            message ?
-                                <p className="font-bold mt-5">{message}</p>
-                                : <></>
-                        }
-                        <p>{JSON.stringify(nft)}</p>
+                        <div className="mb-6">
+                            <button type="button" className={_btnCSS} onClick={btnSubmitClick}>Submit</button>
+                        </div>
                     </form>
+
+                    {
+
+                        message ?
+                            <div className="block w-full">
+                                <div className="font-regular relative mt-4 block w-full rounded-lg bg-gray-700 p-4 text-base leading-5 text-white opacity-100">{message}</div>
+                            </div>
+                            : <></>
+                    }
+
                 </div>
             </div>
         </section>

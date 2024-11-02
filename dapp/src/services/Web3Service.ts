@@ -118,8 +118,7 @@ export async function createAndUpload(nft: NFT): Promise<number> {
     //criação dos metadatos
     const metadataUri = await uploadMetadata({ name: nft.name, description: nft.description, image: uri });
     console.log(metadataUri);
-    //mint da NFT
-    //criação do market item
+    //mint da NFT & criação do market item
     const itemId = await createItem(metadataUri, nft.price);
     return itemId;
 }
@@ -130,7 +129,8 @@ export async function loadDetails(itemId: number): Promise<NFTDetail> {
     const collectionContract = new ethers.Contract(COLLECTION_ADDRESS, NFTCollectionABI, provider);
 
     //TODO: mapping marketItems deve ser PUBLIC [OK]
-    const item: NFTDetail = await marketContract.marketItems(itemId); //mapping(uint => MarketItem) marketItems; // itemId => market item    
+    const item: NFTDetail = await marketContract.marketItems(itemId);
+    //mapping(uint => MarketItem) marketItems; // itemId => market item    
     if (!item) {
         return {} as NFTDetail;
     }
@@ -138,7 +138,6 @@ export async function loadDetails(itemId: number): Promise<NFTDetail> {
     const tokenUri = await collectionContract.tokenURI(item.tokenId);
     // gateway: yellow-wonderful-vulture-357.mypinata.cloud + CID (tokenUri)
     const metadata = await axios.get(`https://yellow-wonderful-vulture-357.mypinata.cloud/ipfs/${tokenUri}`);
-    console.log(metadata);
     const price = ethers.formatUnits(item.price.toString(), "ether");
 
     return {
@@ -152,4 +151,21 @@ export async function loadDetails(itemId: number): Promise<NFTDetail> {
         description: metadata.data.description
     } as NFTDetail;
 
+}
+
+export async function buyNFT(nftDetail: NFTDetail): Promise<string> {
+    const provider = await getProvider();
+    const signer = await provider.getSigner();
+    const contrat = new ethers.Contract(MARKETPLACE_ADDRESS, NFTMarketABI, signer);
+    const price = ethers.parseUnits(nftDetail.price.toString(), "ether");
+    const buyTx = await contrat.createMarketSale(COLLECTION_ADDRESS, nftDetail.itemId, { value: price });
+    const buyTxReceipt: ethers.ContractTransactionReceipt = await buyTx.wait();
+    let eventLog = buyTxReceipt.logs.find(log => (log as EventLog).eventName === "Transfer") as EventLog;
+    const buyerAddress = eventLog.args[2];
+    /* event Transfer(
+    address indexed _from, 
+    address indexed _to, 
+    uint256 indexed _tokenId <----[index 2]
+    ); */
+    return buyerAddress;
 }
