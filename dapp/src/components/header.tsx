@@ -17,7 +17,6 @@ function Header() {
                     <div className="flex flex-col ml-auto lg:flex-row">
                         <Link href="/" className="font-medium hover:text-gray-300 py-2 text-opacity-60 text-white lg:p-4 xl:px-6">Home</Link>
                         <Link href="/create" className="font-medium hover:text-gray-300 py-2 text-opacity-60 text-white lg:p-4 xl:px-6">Create</Link>
-                        <Link href="/collectibles" className="font-medium hover:text-gray-300 py-2 text-opacity-60 text-white lg:p-4 xl:px-6">Collectibles</Link>
                     </div>
                     <Link href="/account" className="bg-gradient-to-t bg-primary-500 font-bold from-primary-500 hover:bg-primary-600 hover:from-primary-600 hover:to-primary-500 inline-block px-6 py-2 rounded text-white to-primary-400">My NFTs</Link>
                 </div>
