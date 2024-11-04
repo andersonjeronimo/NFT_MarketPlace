@@ -6,9 +6,9 @@ const nextConfig = {
         CHAIN_ID: process.env.CHAIN_ID
     },
     images: {
-        domains: [
-            "yellow-wonderful-vulture-357.mypinata.cloud",
-            "images.unsplash.com"
+        remotePatterns: [
+            { protocol: "https", hostname: "yellow-wonderful-vulture-357.mypinata.cloud" },
+            { protocol: "https", hostname: "images.unsplash.com" }
         ]
     }
 };
